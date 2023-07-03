@@ -7,6 +7,7 @@ library(dplyr)
 library(stringr)
 
 # FUNCIONES
+# FIXME: Better organize functions. Also documentation
 # --------------------------------------------------------------------------- #
 
 # Function 1: Conver references to a list author-year
@@ -17,31 +18,52 @@ create_filename <- function(references) {
     year_format <- references[2]
     references <- references[-c(1:3)]
 
-    if (author_format ==  "Surname, F.S.") {
-        author_search <- "([,])"
-    } else if (author_format == "Surname FS") {
-        author_search <- " "
-    }
-
-    if (year_format == "2000:") {
-        year_search <- "(\\d{4}: )"
-    } else if (year_format == "(2000)") {
-        year_search <- "[)] "
-    }
-
     # Cleaning the references
     references <- tibble(references = references) %>%
         mutate(
-            author = str_split_fixed(references, author_search, n = 2)[, 1],
-            author = chartr(" ", "_", author),
-            year = str_extract(references, "(\\d{4})"),
-            title = str_split_fixed(references, year_search, n = 2)[, 2],
-            title = str_split_fixed(title, "[.]", n = 2)[, 1],
+            author = search_for_author(references, author_format),
+            year = search_for_year(references, year_format),
+            title = search_for_title(references, year_format),
             file_name = paste0(author, "-", year)
         ) %>%
         select(file_name, title, author, year, references)
-
     return(references)
+}
+
+search_for_author <- function(references, format) {
+    if (format ==  "Surname, F.S.") {
+        search_pattern <- "[,]"
+    } else if (format == "Surname FS") {
+        search_pattern <- " "
+    }
+    author <- str_split_fixed(references, search_pattern, n = 2)[, 1]
+    author <- chartr(" ", "_", author)
+    return(author)
+}
+
+search_for_year <- function(references, format) {
+    if (format %in% c("2000:", "(2000)", "(2000),")) {
+        year <- str_extract(references, "(\\d{4})")
+    } else if (format == "2000.NL") {
+        references <- trimws(references)
+        n <- nchar(references)
+        year <- substring(references, n - 4, n - 1)
+    }
+    return(year)
+}
+
+
+search_for_title <- function(references, format) {
+    if (format %in% c("2000:", "2000.NL")) {
+        search_pattern <- ": "
+    } else if (format == "(2000)") {
+        search_pattern <- "[)] "
+    } else if (format == "(2000),") {
+        search_pattern <- "[)], "
+    }
+    title <- str_split_fixed(references, search_pattern, n = 2)[, 2]
+    title <- str_split_fixed(title, "[.]", n = 2)[, 1]
+    return(title)
 }
 
 # Function 2: Get the current files
