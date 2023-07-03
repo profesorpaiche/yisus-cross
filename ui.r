@@ -11,18 +11,6 @@ fluidPage(
               you about later.")
         ),
         mainPanel(
-            # FIXME: Instead of selectInput, place the author_format and
-            #        year_format in the reference of each file
-            selectInput(
-                inputId = "author_format",
-                label = "Format of the main author",
-                choices = c("Surname, F.S.", "Surname FS")
-            ),
-            selectInput(
-                inputId = "year_format",
-                label = "Format of year",
-                choices = c("2000:", "(2000)")
-            ),
             fileInput(
                 "current",
                 label = "Please, insert file with the references"
