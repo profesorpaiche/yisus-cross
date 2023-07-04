@@ -17,10 +17,6 @@ fluidPage(
                     "current",
                     label = "Please, insert file with the references"
                 ),
-                actionButton(
-                    inputId = "load_current",
-                    label = "Load file"
-                ),
                 DTOutput("current_content"),
                 hr(),
                 fileInput(

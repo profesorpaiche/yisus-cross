@@ -1,13 +1,13 @@
 function(input, output) {
     # Current files
-    current_references <- eventReactive(input$load_current, {
+    current_references <- eventReactive(input$current, {
         file <- input$current
         current_references <- readLines(file$datapath) %>%
             look_references() %>%
             create_filename()
     })
 
-    observeEvent(input$load_current, {
+    observeEvent(input$current, {
         output$current_content <- renderDT(
             current_references(),
             options = list(pageLength = 5)
