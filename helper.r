@@ -5,6 +5,7 @@
 library(shiny)
 library(dplyr)
 library(stringr)
+library(DT)
 
 # FUNCIONES
 # FIXME: Better organize functions. Also documentation

@@ -8,9 +8,10 @@ function(input, output) {
     })
 
     observeEvent(input$load_current, {
-        output$current_content <- renderPrint({
-            print(current_references())
-        })
+        output$current_content <- renderDT(
+            current_references(),
+            options = list(pageLength = 5)
+        )
     })
 
     # Old files
@@ -20,9 +21,10 @@ function(input, output) {
     })
 
     observeEvent(input$old, {
-        output$old_content <- renderPrint({
-            print(old_references())
-        })
+        output$old_content <- renderDT(
+            old_references(),
+            options = list(pageLength = 5)
+        )
     })
 
     # Old in current file

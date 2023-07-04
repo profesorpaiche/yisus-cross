@@ -21,14 +21,14 @@ fluidPage(
                     inputId = "load_current",
                     label = "Load file"
                 ),
-                verbatimTextOutput("current_content"),
+                DTOutput("current_content"),
                 hr(),
                 fileInput(
                     "old",
                     label = "Please, insert all the files already read",
                     multiple = TRUE
                 ),
-                verbatimTextOutput("old_content")
+                DTOutput("old_content")
             ),
             tabPanel(
                 title = "Cross-reference",
